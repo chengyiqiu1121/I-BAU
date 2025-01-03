@@ -58,7 +58,8 @@ class GradientDescent(DifferentiableOptimizer):
 
 
 def gd_step(params, loss, step_size, create_graph=True):
-    grads = torch.autograd.grad(loss, params, create_graph=create_graph)
+    grads = torch.autograd.grad(loss, params, create_graph=create_graph, allow_unused=True)
+    grads = [g if g is not None else torch.zeros_like(p) for g, p in zip(grads, params)]
     return [w - step_size * g for w, g in zip(params, grads)]
 
 
